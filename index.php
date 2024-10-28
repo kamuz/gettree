@@ -27,8 +27,6 @@ while($row = $smpt->fetch()){
 // dd($data);
 
 function getTree($data) {
-    // $i = $i ?? 0;
-    $i = isset($i) ? $i : 0;
     $tree = [];
 
     foreach ($data as $id => &$node) {
@@ -39,15 +37,29 @@ function getTree($data) {
             // Change tree
             $data[$node['parent_id']]['children'][$id] = &$node;
         }
-
-        $i++;
-        echo "<pre>=============== ($i) DATA ===============</pre>";
-        dd($data);
-        echo "<pre>=============== ($i) TREE ===============</pre>";
-        dd($tree);
     }
 
     return $tree;
 }
 
-dd(getTree($data));
+$tree = getTree($data);
+
+function build_menu_list($tree){
+    $html = '<ul>';
+
+    foreach($tree as $item){
+        if(isset($item['children'])){
+            $html .= '<li><a href="?category=' . $item['id'] . '">' . $item['title'] . '</a>';
+            $html .= build_menu_list($item['children']);
+            $html .= '</li>';
+        } else {
+            $html .= '<li><a href="?category=' . $item['id'] . '">' . $item['title'] . '</a></li>';
+        }
+    }
+
+    $html .= '</ul>';
+
+    return $html;
+}
+
+echo build_menu_list($tree);

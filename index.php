@@ -24,8 +24,6 @@ while($row = $smpt->fetch()){
     $data[$row['id']] = $row;
 }
 
-// dd($data);
-
 function getTree($data) {
     $tree = [];
 
@@ -62,4 +60,19 @@ function build_menu_list($tree){
     return $html;
 }
 
+function build_menu_select($tree, $tab = ''){
+    $html = '';
+    foreach($tree as $item){
+        if(isset($item['children'])){
+            $html .= "<option>" . $tab . $item['title'] . "</option>";
+            $html .= build_menu_select($item['children'], $tab . ' - ');
+        } else {
+            $html .= "<option>" . $tab . $item['title'] . "</option>";
+        }
+    }
+    return $html;
+}
+
 echo build_menu_list($tree);
+
+echo '<select>' . build_menu_select($tree) . '</select>';

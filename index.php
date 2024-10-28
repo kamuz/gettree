@@ -24,6 +24,8 @@ while($row = $smpt->fetch()){
     $data[$row['id']] = $row;
 }
 
+dd($data);
+
 function getTree($data) {
     $tree = [];
 
@@ -40,6 +42,7 @@ function getTree($data) {
     return $tree;
 }
 
+dd(getTree($data));
 $tree = getTree($data);
 
 function build_menu_list($tree){
